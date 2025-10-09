@@ -20,6 +20,7 @@ private fun buildWikipediaUrl(articleTitle: String): String {
 }
 
 /**
+ * NOWA WERSJA Z OGRANICZENIEM
  * Funkcja pomocnicza, która dla danego tytułu artykułu pobiera stronę
  * i wyciąga z niej wszystkie unikalne linki do innych artykułów.
  *
@@ -28,35 +29,32 @@ private fun buildWikipediaUrl(articleTitle: String): String {
  */
 private fun extractArticleLinks(articleTitle: String): Set<String> {
     val foundLinks = mutableSetOf<String>()
+    val maxLinksPerPage = 20 // OGRANICZENIE
     try {
         val url = buildWikipediaUrl(articleTitle)
         val doc = Jsoup.connect(url).get()
 
-        // Selektor CSS:
-        // #mw-content-text -> wybierz główny kontener z treścią artykułu
-        // a[href] -> wewnątrz niego znajdź wszystkie znaczniki <a>, które mają atrybut href
         val links = doc.select("#mw-content-text a[href]")
 
-        for (link in links) {
+        // Bierzemy tylko określoną liczbę linków z danej strony
+        for (link in links.take(maxLinksPerPage * 2)) { // Bierzemy więcej, bo będziemy odrzucać
             val href = link.attr("href")
 
-            // Filtrujemy linki, które nas interesują:
-            // 1. Muszą zaczynać się od "/wiki/" - to standard dla linków do artykułów.
-            // 2. Nie mogą zawierać ":" - to eliminuje strony specjalne (np. "Pomoc:", "Plik:", "Wikipedia:").
-            // 3. Nie mogą być linkiem do strony głównej.
             if (href.startsWith("/wiki/") && !href.contains(":") && href != "/wiki/Strona_główna") {
-                // Wyciągamy sam tytuł z linku (usuwamy "/wiki/")
                 val title = href.substringAfter("/wiki/")
-                // Dekodujemy tytuł, aby zamienić np. %C4%85 na "ą"
                 val decodedTitle = URLDecoder.decode(title, "UTF-8")
-                foundLinks.add(decodedTitle)
+
+                // Dodajemy link i sprawdzamy, czy nie przekroczyliśmy limitu
+                if (foundLinks.size < maxLinksPerPage) {
+                    foundLinks.add(decodedTitle)
+                } else {
+                    break // Przerwij pętlę, jeśli osiągnęliśmy limit
+                }
             }
         }
     } catch (e: HttpStatusException) {
-        // Ignorujemy błędy typu 404 (strona nie znaleziona)
         println("! Nie można odnaleźć strony dla: $articleTitle (błąd ${e.statusCode})")
     } catch (e: Exception) {
-        // Inne błędy (np. brak połączenia)
         println("! Wystąpił błąd podczas przetwarzania $articleTitle: ${e.message}")
     }
     return foundLinks
