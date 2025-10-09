@@ -15,7 +15,7 @@ fun printResults(results: Map<Int, Set<String>>)
         //results[depth]?.forEach { println(it) }
         val titles = results[depth]!!.toList() // Pobieramy listę tytułów dla danego poziomu
         titles.forEachIndexed { index, title ->
-            val prefix = if(index == titles.lastIndex) "└─" else "  ├─"
+            val prefix = if(index == titles.lastIndex) "\t└─" else "\t├─"
             println("$prefix $title")
         }
     }
