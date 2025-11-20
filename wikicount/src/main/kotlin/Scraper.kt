@@ -20,7 +20,6 @@ private fun buildWikipediaUrl(articleTitle: String): String {
 }
 
 /**
- * NOWA WERSJA Z OGRANICZENIEM
  * Funkcja pomocnicza, która dla danego tytułu artykułu pobiera stronę
  * i wyciąga z niej wszystkie unikalne linki do innych artykułów.
  *
