@@ -57,6 +57,7 @@ private fun extractArticleLinks(articleTitle: String): Set<String> {
  * @param startTerm Tytuł artykułu startowego.
  * @param maxDepth Maksymalna głębokość przeszukiwania.
  * @return Mapa, gdzie kluczem jest poziom głębokości, a wartością zbiór tytułów artykułów.
+ * @implNote Wykorzystuje parallel stream do równoległego pobierania i przetwarzania linków.
  */
 fun findWikipediaLinks(startTerm: String, maxDepth: Int): Map<Int, Set<String>> {
 

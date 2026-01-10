@@ -1,13 +1,11 @@
 package org.example
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-
-
 /**
  * Główna funkcja programu. Interfejs użytkownika
+ * Oparte o wątkach z ręczną synchronizacją
  * @author: Damian Skonieczny
  */
+
 fun main() {
     println("Witaj użytkowniku. Podaj hasło do przeszukiwania (np. Fortepian)")
     val termin = readln()
