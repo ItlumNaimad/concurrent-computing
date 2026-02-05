@@ -1,5 +1,11 @@
 package org.example
 
+/**
+ * Funkcja wyświetlająca wyniki przeszukiwania w formie drzewiastej struktury.
+ * Iteruje po poziomach głębokości i wypisuje znalezione tytuły artykułów.
+ *
+ * @param results Mapa wyników, gdzie kluczem jest poziom głębokości, a wartością zbiór tytułów.
+ */
 fun printResults(results: Map<Int, Set<String>>)
 {
     if(results.isEmpty())

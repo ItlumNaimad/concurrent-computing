@@ -1,5 +1,6 @@
 plugins {
     kotlin("jvm") version "2.1.21"
+    application
 }
 
 group = "org.example"
@@ -14,9 +15,20 @@ dependencies {
     implementation("org.jsoup:jsoup:1.15.3")
 }
 
+application {
+    mainClass.set("org.example.MainKt")
+}
+
 tasks.test {
     useJUnitPlatform()
 }
 kotlin {
     jvmToolchain(21)
+}
+
+tasks.withType<JavaExec> {
+    standardInput = System.`in`
+    if (project.hasProperty("args")) {
+        args = project.property("args").toString().split(" ")
+    }
 }

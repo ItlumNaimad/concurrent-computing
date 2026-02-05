@@ -14,8 +14,7 @@ import java.util.ArrayDeque
  */
 
 private fun buildWikipediaUrl(articleTitle: String): String {
-    // Spacje zamieniamy na podkreślniki, to standard w URL-ach Wiki.
-    val formattedTerm = articleTitle.replace(' ', '_')
+    val formattedTerm = articleTitle.trim().replace(' ', '_')
     return "https://pl.wikipedia.org/wiki/$formattedTerm"
 }
 
@@ -28,10 +27,12 @@ private fun buildWikipediaUrl(articleTitle: String): String {
  */
 private fun extractArticleLinks(articleTitle: String): Set<String> {
     val foundLinks = mutableSetOf<String>()
-    val maxLinksPerPage = 20 // OGRANICZENIE
+    val maxLinksPerPage = 50 // OGRANICZENIE
     try {
         val url = buildWikipediaUrl(articleTitle)
-        val doc = Jsoup.connect(url).get()
+        val doc = Jsoup.connect(url)
+            .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36")
+            .get()
 
         val links = doc.select("#mw-content-text a[href]")
 
